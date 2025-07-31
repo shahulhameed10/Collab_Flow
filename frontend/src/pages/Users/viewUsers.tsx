@@ -21,7 +21,6 @@ import {
   SelectContent,
 } from '@/components/ui/select';
 import {
-  UserIcon,
   ShieldAlert,
   UserCog,
   UserCheck,
