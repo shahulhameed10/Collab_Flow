@@ -1,9 +1,7 @@
-import { useState, useRef } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
 
 type Option = {
   label: string;
