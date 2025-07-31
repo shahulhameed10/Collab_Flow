@@ -19,17 +19,30 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Define allowed origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://colflow.netlify.app',
+];
+
+// CORS Middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
 
+// Parse incoming JSON
 app.use(express.json());
 
-// API Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/workspaces', workspaceRoutes);
 app.use('/api/projects', projectRoutes);
@@ -37,28 +50,30 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/comments', taskCommentRoutes);
 app.use('/api', statsRoutes);
 
-// Basic test route
+// Test route
 app.get('/', (_req: Request, res: Response) => {
   res.send('🚀 CollabFlow API is running!');
 });
 
-// Centralized error handler
+// Error handler
 app.use(errorHandler);
 
-// Create HTTP server and attach Socket.IO
+// Create HTTP server
 const server = http.createServer(app);
+
+// Socket.IO setup with proper CORS
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
-// Share io instance across the app
+// Share io instance
 app.locals.io = io;
 
-// Socket.IO Events
+// Socket.IO events
 io.on('connection', (socket) => {
   console.log('🔗 A user connected');
 
@@ -79,13 +94,13 @@ io.on('connection', (socket) => {
   });
 });
 
-// Start server with DB connection
+// Start server
 const startServer = async () => {
   try {
     await sequelize.authenticate();
     console.log('🟢 Database connected successfully.');
 
-    // Sync models and seed data (optional in production)
+    // Sync models and optionally seed
     await sequelize.sync({ force: true });
     await seedData();
 
