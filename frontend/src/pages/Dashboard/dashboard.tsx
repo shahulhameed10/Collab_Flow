@@ -11,11 +11,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import axios from "axios";
 
-
-//req for fetch stats details
+// Fetch stats from backend using token
 const fetchStats = async () => {
   const token = localStorage.getItem("token");
-  const res = await axios.get("http://localhost:5000/api/stats", {
+  const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/stats`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -36,14 +35,10 @@ export default function DashboardPage() {
   const recentProjects = data?.recentProjects ?? [];
   const recentTasks = data?.recentTasks ?? [];
 
-
-  //used usequery state 
   if (isLoading) {
     return <div className="p-6">Loading dashboard...</div>;
   }
 
-
-  //map project and tasks then sort and takes last 3 activity
   const recentActivities = [...recentProjects.map((p: any) => ({ ...p, type: 'project' })), ...recentTasks.map((t: any) => ({ ...t, type: 'task' }))]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 3);
@@ -128,7 +123,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </motion.div>
-        
+
         <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
           <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 shadow-lg">
             <CardContent className="p-4">
@@ -153,7 +148,6 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </motion.div>
-
       </div>
     </div>
   );

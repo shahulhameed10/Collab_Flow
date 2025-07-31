@@ -75,7 +75,8 @@ export default function CreateUser() {
   const registerUser = useMutation({
     mutationFn: () => {
       console.log("Submitting form to backend:", form); // ✅ debug log
-      return axios.post("http://localhost:5000/api/auth/register", form);
+      return axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, form);
+
     },
     onSuccess: () => {
       toast.success("User registered successfully!");

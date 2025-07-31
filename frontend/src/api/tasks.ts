@@ -21,7 +21,7 @@ export const createTask = async (data: {
   assignedTo: number;
   projectId: number;
 }) => {
-  const res = await axios.post("http://localhost:5000/api/tasks", data);
+  const res = await axios.post("/api/tasks", data);
   return res.data.task || res.data;
 };
 

@@ -17,7 +17,7 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         email,
         password,
       });
@@ -33,17 +33,15 @@ const LoginPage = () => {
         setError('Invalid response from server.');
       }
     } catch (err: any) {
-      console.error("Login error:", err);
+      console.error('Login error:', err);
       setError(err?.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="h-screen overflow-hidden grid grid-cols-1 md:grid-cols-2">
-      {/* Left Side - Image */}
       <div className="hidden md:block">
         <img
           src="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?q=80&w=1080&auto=format&fit=crop"
@@ -52,9 +50,7 @@ const LoginPage = () => {
         />
       </div>
 
-      {/* Right Side - Login Area */}
       <div className="relative flex flex-col justify-start items-center bg-[#121212] px-6 py-12 overflow-hidden">
-        {/* Top Branding */}
         <div className="text-center mb-10 mt-4">
           <h1 className="text-4xl font-bold text-white">CollabFlow</h1>
           <p className="text-white/70 text-sm mt-2 max-w-xs">
@@ -62,7 +58,6 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* Login Card */}
         <div className="bg-white/5 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-3xl w-full max-w-md text-white px-8 py-10 space-y-6 transition-all duration-300 transform hover:scale-105 hover:border-white/30 hover:shadow-white/20">
           <h2 className="text-2xl font-semibold text-center">LOGIN</h2>
 
@@ -98,7 +93,6 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Tips Box */}
           <div className="mt-6 bg-white/10 border border-white/20 rounded-xl p-4 hover:bg-white/20 transition-all duration-300 w-fit max-w-sm mx-auto">
             <div className="flex items-start gap-3">
               <Lightbulb className="text-yellow-400 mt-1" size={20} />
@@ -111,7 +105,6 @@ const LoginPage = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

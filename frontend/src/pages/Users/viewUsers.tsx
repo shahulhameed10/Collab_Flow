@@ -29,6 +29,8 @@ import {
 } from 'lucide-react';
 import { Roles } from '@/constants/roles';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 interface User {
   id: number;
   email: string;
@@ -64,7 +66,7 @@ const ViewUsersPage = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const res = await axios.get('http://localhost:5000/api/auth/profile', {
+          const res = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setCurrentUserRole(res.data.user.role);
@@ -84,7 +86,7 @@ const ViewUsersPage = () => {
     queryKey: ['users'],
     queryFn: async () => {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/auth/users', {
+      const res = await axios.get(`${API_BASE_URL}/api/auth/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data;
@@ -95,7 +97,7 @@ const ViewUsersPage = () => {
     mutationFn: async ({ id, role, email, password }: { id: number; role: string; email: string; password?: string }) => {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/auth/users/${id}`,
+        `${API_BASE_URL}/api/auth/users/${id}`,
         { role, email, ...(password ? { password } : {}) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -108,7 +110,7 @@ const ViewUsersPage = () => {
   const deleteUserMutation = useMutation({
     mutationFn: async (id: number) => {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/auth/users/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/auth/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     },
@@ -118,7 +120,6 @@ const ViewUsersPage = () => {
   });
 
   const roleCount = (role: string) => users.filter((u) => u.role === role).length;
-
   return (
     <div className="p-6">
       <div className="mb-6">

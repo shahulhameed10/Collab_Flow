@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 interface WorkspacePayload {
   name: string;
   brandingLogo: string;
@@ -23,7 +25,7 @@ export const fetchUsers = async (): Promise<{ id: number; email: string }[]> => 
   const token = localStorage.getItem("token");
   if (!token) throw new Error("❌ No auth token found");
 
-  const res = await axios.get("http://localhost:5000/api/auth/users", {
+  const res = await axios.get(`${BASE_URL}/api/auth/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -39,7 +41,7 @@ export const createWorkspace = async (
 
   try {
     const res = await axios.post<WorkspaceResponse>(
-      "http://localhost:5000/api/workspaces",
+      `${BASE_URL}/api/workspaces`,
       payload,
       {
         headers: {
@@ -59,7 +61,7 @@ export const getAllWorkspaces = async () => {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("No auth token found");
 
-  const res = await axios.get("http://localhost:5000/api/workspaces", {
+  const res = await axios.get(`${BASE_URL}/api/workspaces`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -67,13 +69,9 @@ export const getAllWorkspaces = async () => {
   return res.data;
 };
 
-
-
 export const updateWorkspace = async ({ id, name, brandingLogo }: any) => {
-  
-  
   const token = localStorage.getItem("token");
-  const res = await fetch(`http://localhost:5000/api/workspaces/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/workspaces/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -85,10 +83,9 @@ export const updateWorkspace = async ({ id, name, brandingLogo }: any) => {
   return res.json();
 };
 
-
 export const deleteWorkspace = async (id: number) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`http://localhost:5000/api/workspaces/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/workspaces/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
