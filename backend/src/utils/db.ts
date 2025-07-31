@@ -1,19 +1,18 @@
 import { Sequelize } from 'sequelize';
-import { config } from '../config/appconfig';
+import dotenv from 'dotenv';
 
-console.log('DB CONFIG:', config.db);
+dotenv.config();
 
-//use sequelise to connect the db
-
-const sequelize = new Sequelize(
-    config.db.name,
-    config.db.user,
-    config.db.pass,
-    {
-        host: config.db.host,
-        dialect: 'postgres',
-        logging:false,
-    }
-);
+const sequelize = new Sequelize(process.env.DATABASE_URL as string, {
+  dialect: 'postgres',
+  protocol: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // important for Render SSL
+    },
+  },
+});
 
 export default sequelize;
